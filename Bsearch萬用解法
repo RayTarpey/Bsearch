@@ -1,0 +1,111 @@
+#include<stdc++.h>
+/*int bsearch(int*,int,int);*/ //一般常見bsearch寫法
+int bsearch_close(int*,int,int);
+int binary_search(int*,int,int);//超級萬用解，記這個能解決 1.剛好相等 2.第一次 3.最後一次 等三種問題，其他都不用記了，上下限也都不用搞
+//int asd (int*,int,int);
+int main(){
+	int ar[]={1,2,2,4,5,5,5,7,8};
+	int a[]={1,2,2,3,4};
+	int len = sizeof(ar)/sizeof(int)-1;
+	/*int index =bsearch(ar,5,len);*/
+	int index3 = bsearch_close(ar,5,len);
+	int index4 = binary_search(ar,5,len);
+	int index5 = binary_search(a,2,len);
+	printf("--------------%d",index5);
+	system("pause");
+	return 0;
+}
+
+//記起來!! 超級萬用解，可以求第一次/最後一次出現的位置，循環條件:(l+1<r)
+int binary_search(int* arr, int k, int len) {
+	int l=0,r=len;
+	while(l + 1 < r){
+		int mid = l + (r - l) / 2;
+		if(arr[mid]==k){
+			//(修改處一){
+			//求"第一次"出現位置
+			r = mid;//想法:因是第一次，所以往左找，所以要定義右邊
+			
+			//求"最後一次"出現位置
+			//l = mid;//想法:因是最後一次，所以往右找，所以要定義左邊
+			//(修改處一)}
+		}
+		else if(arr[mid]<k){
+			l = mid; 
+		}
+		else{
+			r = mid;
+		}
+	}
+
+	//(修改處二){
+	//求"第一次"出現位置，想法:找第一次，那就回傳l的l先判斷，有就回傳
+	if(arr[l] == k){
+		return l;
+	}
+	if(arr[r] == k){
+		return r;
+	}
+
+	//求"最後一次"出現位置，想法:找最後一次，那就回傳r的r先判斷，有就回傳
+	/*if(arr[r] == k){
+		return r;
+	}
+	if(arr[l] == k){
+		return l;
+	}*/
+	//(修改處二)}
+
+	return -1;
+}
+
+
+/*int bsearch(int *arr, int k,int len){//直接找值--循環條件:(l <= r)、搜索空間:l = mid + 1、r = mid - 1
+	int l=0,r=len;
+	while (l <= r) {
+        int mid = l + (r - l) / 2;
+        if (arr[mid] == k) {
+			printf("位子為 %d\n",mid);
+            return mid;			
+        } else if (arr[mid] < k) {
+            l = mid + 1;
+        } else {
+            r = mid - 1;
+		}
+    }
+	printf("找不到\n");
+    return -1;
+}
+*/
+
+//最接近k的數(萬用型去改)--循環條件:(l+1<r)即l和r相鄰就結束，搜索空間:l=mid、r=mid
+int bsearch_close(int *arr, int k,int len){
+	int l=0,r=len;
+	while(l + 1 < r){
+		int mid = l + (r - l) / 2;
+		if(arr[mid]<k){
+			l = mid; 
+		}
+		else{
+			r = mid;
+		}
+	}
+	if(arr[r]<k){//最大的值都比k小，那就回傳最大的值
+		printf("最接近該數的值=%d\n",r);
+		return r;
+	}
+	else if(arr[l]>k){//最小的值都比k大，那就回傳最小的值
+		printf("最接近該數的值=%d\n",l);
+		return l;
+	}
+	else{
+		int x = k-arr[l]>arr[r]-k?r:l;//如果介於中間，那就比大小，回傳相減後最小的 
+		printf("最接近該數的值=%d\n",x);
+		return x; 
+	}
+
+}
+
+
+
+
